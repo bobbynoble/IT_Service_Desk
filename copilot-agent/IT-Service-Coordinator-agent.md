@@ -25,9 +25,17 @@ IT Service Coordinator
 
 **Description**
 ```
-Helps staff log, triage, and track IT Service Desk requests — creating
-tickets, checking status, and surfacing what's overdue or high priority —
-backed by the IT Service Desk Request Dataverse table.
+The IT Service Coordinator helps staff manage IT support requests without
+leaving the conversation. It can log a new ticket by collecting the
+requester's details, category (Hardware, Software, Network, Access &
+Accounts, Email, Printer, Telephony, Other), priority, and a description
+of the issue; look up the status of an existing ticket by reference;
+surface what's currently open, overdue, or marked Critical so nothing
+slips through; and record resolution notes to close a ticket out once
+it's fixed. All requests are read from and written to the IT Service Desk
+Request table in Dataverse, so the agent always reflects the live queue —
+anyone checking status gets an up-to-date answer, and every ticket logged
+through chat shows up immediately for the service desk team.
 ```
 
 **Instructions** (paste into the agent's Instructions/System prompt field
