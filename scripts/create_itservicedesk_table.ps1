@@ -8,7 +8,7 @@ Write-Host "`n=== Step 2: Confirm environment ===" -ForegroundColor Cyan
 & $pac env who
 
 Write-Host "`n=== Step 3: Create IT Service Desk solution ===" -ForegroundColor Cyan
-# Create a solution to hold the table (best practice — keeps it portable)
+# Create a solution to hold the table (best practice - keeps it portable)
 & $pac solution create --name "ITServiceDeskAgent" --publisher-name "RNConsultancy" --publisher-prefix "rnc"
 
 Write-Host "`n=== Step 4: Create the IT Service Desk Request table ===" -ForegroundColor Cyan
@@ -207,9 +207,9 @@ foreach ($col in $columns) {
         $body = $col.body | ConvertTo-Json -Depth 10
         Invoke-RestMethod -Uri "$apiBase/EntityDefinitions(LogicalName='$entityLogical')/Attributes" `
             -Method POST -Headers $headers -Body $body | Out-Null
-        Write-Host "  ✓ $colName" -ForegroundColor Green
+        Write-Host "  OK: $colName" -ForegroundColor Green
     } catch {
-        Write-Host "  ! $colName — $($_.Exception.Message)" -ForegroundColor Yellow
+        Write-Host "  ! $colName - $($_.Exception.Message)" -ForegroundColor Yellow
     }
 }
 
@@ -286,12 +286,12 @@ foreach ($choice in @(@{name="rnc_Category"; body=$categoryChoice}, @{name="rnc_
     try {
         Invoke-RestMethod -Uri "$apiBase/EntityDefinitions(LogicalName='$entityLogical')/Attributes" `
             -Method POST -Headers $headers -Body $choice.body | Out-Null
-        Write-Host "  ✓ $($choice.name)" -ForegroundColor Green
+        Write-Host "  OK: $($choice.name)" -ForegroundColor Green
     } catch {
-        Write-Host "  ! $($choice.name) — $($_.Exception.Message)" -ForegroundColor Yellow
+        Write-Host "  ! $($choice.name) - $($_.Exception.Message)" -ForegroundColor Yellow
     }
 }
 
 Write-Host "`n=== Done ===" -ForegroundColor Green
 Write-Host "Table 'rnc_ITServiceDeskRequest' created in $envUrl" -ForegroundColor Green
-Write-Host "View it at: https://make.powerapps.com → Tables → IT Service Desk Request" -ForegroundColor Cyan
+Write-Host "View it at: https://make.powerapps.com -> Tables -> IT Service Desk Request" -ForegroundColor Cyan

@@ -112,7 +112,7 @@ def main():
     }
     r = api(token, "POST", "EntityDefinitions", table_def)
     if r is None:
-        print("Table may already exist — continuing with attribute creation...")
+        print("Table may already exist - continuing with attribute creation...")
     else:
         print(f"  Table created: MetadataId={r.get('MetadataId')}")
 
