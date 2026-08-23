@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImportExportXml version="9.0.0.0" SolutionPackageVersion="9.0" languagecode="1033" generatedBy="CrmLive" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <SolutionManifest>
+    <UniqueName>ITServiceDeskAgent</UniqueName>
+    <LocalizedNames>
+      <LocalizedName description="IT Service Desk Agent" languagecode="1033" />
+    </LocalizedNames>
+    <Descriptions>
+      <Description description="Dataverse table for IT service desk request tracking" languagecode="1033" />
+    </Descriptions>
+    <Version>1.0.0.0</Version>
+    <Managed>false</Managed>
+    <Publisher>
+      <UniqueName>RNConsultancy</UniqueName>
+      <LocalizedNames>
+        <LocalizedName description="RN Consultancy" languagecode="1033" />
+      </LocalizedNames>
+      <Descriptions />
+      <EMailAddress>robert@rnconsultancy.co.uk</EMailAddress>
+      <SupportingWebsiteUrl />
+      <CustomizationPrefix>rnc</CustomizationPrefix>
+      <CustomizationOptionValuePrefix>10000</CustomizationOptionValuePrefix>
+      <Addresses>
+        <Address>
+          <AddressNumber>1</AddressNumber>
+          <AddressTypeCode>1</AddressTypeCode>
+          <City />
+          <County />
+          <Country />
+          <Fax />
+          <FreightTermsCode xsi:nil="true" />
+          <ImportSequenceNumber xsi:nil="true" />
+          <Latitude xsi:nil="true" />
+          <Line1 />
+          <Line2 />
+          <Line3 />
+          <Longitude xsi:nil="true" />
+          <Name />
+          <PostalCode />
+          <PostOfficeBox />
+          <PrimaryContactName />
+          <ShippingMethodCode>1</ShippingMethodCode>
+          <StateOrProvince />
+          <Telephone1 />
+          <Telephone2 />
+          <Telephone3 />
+          <TimeZoneRuleVersionNumber xsi:nil="true" />
+          <UPSZone />
+          <UTCOffset xsi:nil="true" />
+          <WebSiteURL />
+        </Address>
+      </Addresses>
+    </Publisher>
+    <RootComponents>
+      <RootComponent type="1" schemaName="rnc_itservicedeskrequest" behavior="0" />
+      <RootComponent type="9" schemaName="rnc_category" behavior="0" />
+      <RootComponent type="9" schemaName="rnc_priority" behavior="0" />
+      <RootComponent type="9" schemaName="rnc_status" behavior="0" />
+    </RootComponents>
+    <MissingDependencies />
+  </SolutionManifest>
+</ImportExportXml>

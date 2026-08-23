@@ -1,0 +1,278 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ImportExportXml version="9.0.0.0" SolutionPackageVersion="9.0" languagecode="1033" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <Entities>
+    <Entity>
+      <Name LocalizedName="IT Service Desk Request" OriginalName="rnc_ITServiceDeskRequest">rnc_itservicedeskrequest</Name>
+      <ObjectTypeCode>10000</ObjectTypeCode>
+      <OwnershipType>UserOwned</OwnershipType>
+      <PrimaryNameAttribute>rnc_name</PrimaryNameAttribute>
+      <IsAuditEnabled>1</IsAuditEnabled>
+      <IsAvailableOffline>0</IsAvailableOffline>
+      <IsDocumentManagementEnabled>0</IsDocumentManagementEnabled>
+      <IsConnectionsEnabled>0</IsConnectionsEnabled>
+      <IsActivityParty>0</IsActivityParty>
+      <IsMailMergeEnabled>0</IsMailMergeEnabled>
+      <IsVisibleInMobileClient>1</IsVisibleInMobileClient>
+      <LocalizedNames>
+        <LocalizedName description="IT Service Desk Request" languagecode="1033" />
+      </LocalizedNames>
+      <LocalizedCollectionNames>
+        <LocalizedCollectionName description="IT Service Desk Requests" languagecode="1033" />
+      </LocalizedCollectionNames>
+      <Descriptions>
+        <Description description="Tracks IT service desk / helpdesk support requests" languagecode="1033" />
+      </Descriptions>
+      <attributes>
+        <attribute PhysicalName="rnc_itservicedeskrequestid">
+          <Type>primarykey</Type>
+          <Name>rnc_itservicedeskrequestid</Name>
+          <LogicalName>rnc_itservicedeskrequestid</LogicalName>
+          <RequiredLevel>systemrequired</RequiredLevel>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <LocalizedNames>
+            <LocalizedName description="IT Service Desk Request" languagecode="1033" />
+          </LocalizedNames>
+        </attribute>
+        <attribute PhysicalName="rnc_name">
+          <Type>nvarchar</Type>
+          <Name>rnc_name</Name>
+          <LogicalName>rnc_name</LogicalName>
+          <IsPrimaryName>1</IsPrimaryName>
+          <RequiredLevel>applicationrequired</RequiredLevel>
+          <MaxLength>100</MaxLength>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <IsAuditEnabled>1</IsAuditEnabled>
+          <LocalizedNames>
+            <LocalizedName description="Ticket Reference" languagecode="1033" />
+          </LocalizedNames>
+        </attribute>
+        <attribute PhysicalName="rnc_category">
+          <Type>picklist</Type>
+          <Name>rnc_category</Name>
+          <LogicalName>rnc_category</LogicalName>
+          <RequiredLevel>applicationrequired</RequiredLevel>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <IsAuditEnabled>1</IsAuditEnabled>
+          <optionset Name="rnc_category" localizedName="Category">
+            <OptionSetType>picklist</OptionSetType>
+            <options>
+              <option value="10000000"><Labels><Label description="Hardware" languagecode="1033" /></Labels></option>
+              <option value="10000001"><Labels><Label description="Software" languagecode="1033" /></Labels></option>
+              <option value="10000002"><Labels><Label description="Network" languagecode="1033" /></Labels></option>
+              <option value="10000003"><Labels><Label description="Access &amp; Accounts" languagecode="1033" /></Labels></option>
+              <option value="10000004"><Labels><Label description="Email" languagecode="1033" /></Labels></option>
+              <option value="10000005"><Labels><Label description="Printer" languagecode="1033" /></Labels></option>
+              <option value="10000006"><Labels><Label description="Telephony" languagecode="1033" /></Labels></option>
+              <option value="10000007"><Labels><Label description="Other" languagecode="1033" /></Labels></option>
+            </options>
+            <LocalizedNames>
+              <LocalizedName description="Category" languagecode="1033" />
+            </LocalizedNames>
+          </optionset>
+          <LocalizedNames>
+            <LocalizedName description="Category" languagecode="1033" />
+          </LocalizedNames>
+        </attribute>
+        <attribute PhysicalName="rnc_priority">
+          <Type>picklist</Type>
+          <Name>rnc_priority</Name>
+          <LogicalName>rnc_priority</LogicalName>
+          <RequiredLevel>applicationrequired</RequiredLevel>
+          <DefaultValue>10000001</DefaultValue>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <IsAuditEnabled>1</IsAuditEnabled>
+          <optionset Name="rnc_priority" localizedName="Priority">
+            <OptionSetType>picklist</OptionSetType>
+            <options>
+              <option value="10000000"><Labels><Label description="Low" languagecode="1033" /></Labels></option>
+              <option value="10000001"><Labels><Label description="Medium" languagecode="1033" /></Labels></option>
+              <option value="10000002"><Labels><Label description="High" languagecode="1033" /></Labels></option>
+              <option value="10000003"><Labels><Label description="Critical" languagecode="1033" /></Labels></option>
+            </options>
+            <LocalizedNames>
+              <LocalizedName description="Priority" languagecode="1033" />
+            </LocalizedNames>
+          </optionset>
+          <LocalizedNames>
+            <LocalizedName description="Priority" languagecode="1033" />
+          </LocalizedNames>
+        </attribute>
+        <attribute PhysicalName="rnc_status">
+          <Type>picklist</Type>
+          <Name>rnc_status</Name>
+          <LogicalName>rnc_status</LogicalName>
+          <RequiredLevel>applicationrequired</RequiredLevel>
+          <DefaultValue>10000000</DefaultValue>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <IsAuditEnabled>1</IsAuditEnabled>
+          <optionset Name="rnc_status" localizedName="Status">
+            <OptionSetType>picklist</OptionSetType>
+            <options>
+              <option value="10000000"><Labels><Label description="New" languagecode="1033" /></Labels></option>
+              <option value="10000001"><Labels><Label description="In Progress" languagecode="1033" /></Labels></option>
+              <option value="10000002"><Labels><Label description="On Hold" languagecode="1033" /></Labels></option>
+              <option value="10000003"><Labels><Label description="Resolved" languagecode="1033" /></Labels></option>
+              <option value="10000004"><Labels><Label description="Closed" languagecode="1033" /></Labels></option>
+              <option value="10000005"><Labels><Label description="Cancelled" languagecode="1033" /></Labels></option>
+            </options>
+            <LocalizedNames>
+              <LocalizedName description="Status" languagecode="1033" />
+            </LocalizedNames>
+          </optionset>
+          <LocalizedNames>
+            <LocalizedName description="Status" languagecode="1033" />
+          </LocalizedNames>
+        </attribute>
+        <attribute PhysicalName="rnc_requestername">
+          <Type>nvarchar</Type>
+          <Name>rnc_requestername</Name>
+          <LogicalName>rnc_requestername</LogicalName>
+          <RequiredLevel>applicationrequired</RequiredLevel>
+          <MaxLength>200</MaxLength>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <IsAuditEnabled>1</IsAuditEnabled>
+          <LocalizedNames>
+            <LocalizedName description="Requester Name" languagecode="1033" />
+          </LocalizedNames>
+        </attribute>
+        <attribute PhysicalName="rnc_requesteremail">
+          <Type>nvarchar</Type>
+          <Name>rnc_requesteremail</Name>
+          <LogicalName>rnc_requesteremail</LogicalName>
+          <RequiredLevel>applicationrequired</RequiredLevel>
+          <MaxLength>200</MaxLength>
+          <Format>Email</Format>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <IsAuditEnabled>1</IsAuditEnabled>
+          <LocalizedNames>
+            <LocalizedName description="Requester Email" languagecode="1033" />
+          </LocalizedNames>
+        </attribute>
+        <attribute PhysicalName="rnc_department">
+          <Type>nvarchar</Type>
+          <Name>rnc_department</Name>
+          <LogicalName>rnc_department</LogicalName>
+          <RequiredLevel>none</RequiredLevel>
+          <MaxLength>200</MaxLength>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <LocalizedNames>
+            <LocalizedName description="Department" languagecode="1033" />
+          </LocalizedNames>
+        </attribute>
+        <attribute PhysicalName="rnc_contactnumber">
+          <Type>nvarchar</Type>
+          <Name>rnc_contactnumber</Name>
+          <LogicalName>rnc_contactnumber</LogicalName>
+          <RequiredLevel>none</RequiredLevel>
+          <MaxLength>50</MaxLength>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <LocalizedNames>
+            <LocalizedName description="Contact Number" languagecode="1033" />
+          </LocalizedNames>
+        </attribute>
+        <attribute PhysicalName="rnc_description">
+          <Type>nvarchar</Type>
+          <Name>rnc_description</Name>
+          <LogicalName>rnc_description</LogicalName>
+          <RequiredLevel>applicationrequired</RequiredLevel>
+          <MaxLength>2000</MaxLength>
+          <Format>TextArea</Format>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <IsAuditEnabled>1</IsAuditEnabled>
+          <LocalizedNames>
+            <LocalizedName description="Description" languagecode="1033" />
+          </LocalizedNames>
+        </attribute>
+        <attribute PhysicalName="rnc_resolutionnotes">
+          <Type>nvarchar</Type>
+          <Name>rnc_resolutionnotes</Name>
+          <LogicalName>rnc_resolutionnotes</LogicalName>
+          <RequiredLevel>none</RequiredLevel>
+          <MaxLength>4000</MaxLength>
+          <Format>TextArea</Format>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <LocalizedNames>
+            <LocalizedName description="Resolution Notes" languagecode="1033" />
+          </LocalizedNames>
+        </attribute>
+        <attribute PhysicalName="rnc_assignedto">
+          <Type>nvarchar</Type>
+          <Name>rnc_assignedto</Name>
+          <LogicalName>rnc_assignedto</LogicalName>
+          <RequiredLevel>none</RequiredLevel>
+          <MaxLength>200</MaxLength>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <LocalizedNames>
+            <LocalizedName description="Assigned To" languagecode="1033" />
+          </LocalizedNames>
+        </attribute>
+        <attribute PhysicalName="rnc_deviceassettag">
+          <Type>nvarchar</Type>
+          <Name>rnc_deviceassettag</Name>
+          <LogicalName>rnc_deviceassettag</LogicalName>
+          <RequiredLevel>none</RequiredLevel>
+          <MaxLength>100</MaxLength>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <LocalizedNames>
+            <LocalizedName description="Device / Asset Tag" languagecode="1033" />
+          </LocalizedNames>
+        </attribute>
+        <attribute PhysicalName="rnc_datereported">
+          <Type>datetime</Type>
+          <Name>rnc_datereported</Name>
+          <LogicalName>rnc_datereported</LogicalName>
+          <RequiredLevel>applicationrequired</RequiredLevel>
+          <Format>DateAndTime</Format>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <IsAuditEnabled>1</IsAuditEnabled>
+          <LocalizedNames>
+            <LocalizedName description="Date Reported" languagecode="1033" />
+          </LocalizedNames>
+        </attribute>
+        <attribute PhysicalName="rnc_dueby">
+          <Type>datetime</Type>
+          <Name>rnc_dueby</Name>
+          <LogicalName>rnc_dueby</LogicalName>
+          <RequiredLevel>none</RequiredLevel>
+          <Format>DateAndTime</Format>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <IsAuditEnabled>1</IsAuditEnabled>
+          <LocalizedNames>
+            <LocalizedName description="Due By" languagecode="1033" />
+          </LocalizedNames>
+        </attribute>
+        <attribute PhysicalName="rnc_dateresolved">
+          <Type>datetime</Type>
+          <Name>rnc_dateresolved</Name>
+          <LogicalName>rnc_dateresolved</LogicalName>
+          <RequiredLevel>none</RequiredLevel>
+          <Format>DateAndTime</Format>
+          <DisplayMask>ValidForAdvancedFind|ValidForForm|ValidForGrid</DisplayMask>
+          <IsAuditEnabled>1</IsAuditEnabled>
+          <LocalizedNames>
+            <LocalizedName description="Date Resolved" languagecode="1033" />
+          </LocalizedNames>
+        </attribute>
+      </attributes>
+      <EntitySetName>rnc_itservicedeskrequests</EntitySetName>
+      <EntityInfo>
+        <entity Name="rnc_itservicedeskrequest">
+          <LocalizedNames>
+            <LocalizedName description="IT Service Desk Request" languagecode="1033" />
+          </LocalizedNames>
+        </entity>
+      </EntityInfo>
+    </Entity>
+  </Entities>
+  <Roles />
+  <Workflows />
+  <FieldSecurityProfiles />
+  <Templates />
+  <EntityMaps />
+  <EntityRelationships />
+  <OrganizationSettings />
+  <optionsets />
+  <CustomControls />
+  <SolutionPluginAssemblies />
+  <CanvasApps />
+</ImportExportXml>
