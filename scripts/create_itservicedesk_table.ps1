@@ -1,5 +1,8 @@
 $pac = "C:\Users\RobertNoble\AppData\Local\Microsoft\PowerAppsCLI\Microsoft.PowerApps.CLI.2.9.3\tools\pac.exe"
 $envUrl = "https://rnobleconsultancydefault.crm11.dynamics.com"
+$publisherUniqueName = "RNConsultancy"
+$publisherPrefix = "rnc"
+$solutionUniqueName = "ITServiceDeskAgent"
 
 Write-Host "=== Step 1: Authenticate ===" -ForegroundColor Cyan
 & $pac auth create --url $envUrl --name "RNConsultancy"
@@ -7,38 +10,9 @@ Write-Host "=== Step 1: Authenticate ===" -ForegroundColor Cyan
 Write-Host "`n=== Step 2: Confirm environment ===" -ForegroundColor Cyan
 & $pac env who
 
-Write-Host "`n=== Step 3: Create IT Service Desk solution ===" -ForegroundColor Cyan
-# Create a solution to hold the table (best practice - keeps it portable)
-& $pac solution create --name "ITServiceDeskAgent" --publisher-name "RNConsultancy" --publisher-prefix "rnc"
-
-Write-Host "`n=== Step 4: Create the IT Service Desk Request table ===" -ForegroundColor Cyan
-
-# Build the table definition JSON
-$tableJson = @'
-{
-  "SchemaName": "rnc_ITServiceDeskRequest",
-  "DisplayName": {
-    "@odata.type": "Microsoft.Dynamics.CRM.Label",
-    "LocalizedLabels": [{ "@odata.type": "Microsoft.Dynamics.CRM.LocalizedLabel", "Label": "IT Service Desk Request", "LanguageCode": 1033 }]
-  },
-  "DisplayCollectionName": {
-    "@odata.type": "Microsoft.Dynamics.CRM.Label",
-    "LocalizedLabels": [{ "@odata.type": "Microsoft.Dynamics.CRM.LocalizedLabel", "Label": "IT Service Desk Requests", "LanguageCode": 1033 }]
-  },
-  "Description": {
-    "@odata.type": "Microsoft.Dynamics.CRM.Label",
-    "LocalizedLabels": [{ "@odata.type": "Microsoft.Dynamics.CRM.LocalizedLabel", "Label": "Tracks IT service desk / helpdesk support requests", "LanguageCode": 1033 }]
-  },
-  "OwnershipType": "UserOwned",
-  "TableType": "Standard",
-  "IsAuditEnabled": { "Value": true },
-  "HasActivities": false,
-  "HasNotes": true
-}
-'@
-
-# Use Dataverse Web API to create the table
-Write-Host "Authenticating to Dataverse Web API..." -ForegroundColor Yellow
+Write-Host "`n=== Step 3: Ensure publisher and solution exist ===" -ForegroundColor Cyan
+# pac solution create is not a valid CLI command (as of pac 2.9.x) - the online
+# publisher/solution are created directly via the Dataverse Web API instead.
 
 # Get access token via pac
 $tokenOutput = & $pac auth token 2>&1
@@ -58,6 +32,84 @@ $headers = @{
 }
 
 $apiBase = "$envUrl/api/data/v9.2"
+
+$existingPublisher = Invoke-RestMethod -Uri "$apiBase/publishers?`$filter=uniquename eq '$publisherUniqueName'" -Method GET -Headers $headers
+if ($existingPublisher.value.Count -gt 0) {
+    $publisherId = $existingPublisher.value[0].publisherid
+    Write-Host "Publisher already exists: $publisherId" -ForegroundColor Yellow
+} else {
+    $publisherBody = @{
+        uniquename = $publisherUniqueName
+        friendlyname = "RN Consultancy"
+        customizationprefix = $publisherPrefix
+        customizationoptionvalueprefix = 10000
+    } | ConvertTo-Json
+    $pubHeaders = $headers.Clone()
+    $pubHeaders["Prefer"] = "return=representation"
+    $pubResp = Invoke-RestMethod -Uri "$apiBase/publishers" -Method POST -Headers $pubHeaders -Body $publisherBody
+    $publisherId = $pubResp.publisherid
+    Write-Host "Publisher created: $publisherId" -ForegroundColor Green
+}
+
+$existingSolution = Invoke-RestMethod -Uri "$apiBase/solutions?`$filter=uniquename eq '$solutionUniqueName'" -Method GET -Headers $headers
+if ($existingSolution.value.Count -gt 0) {
+    Write-Host "Solution already exists" -ForegroundColor Yellow
+} else {
+    $solutionBody = @{
+        uniquename = $solutionUniqueName
+        friendlyname = "IT Service Desk Agent"
+        version = "1.0.0.0"
+        "publisherid@odata.bind" = "/publishers($publisherId)"
+    } | ConvertTo-Json
+    Invoke-RestMethod -Uri "$apiBase/solutions" -Method POST -Headers $headers -Body $solutionBody | Out-Null
+    Write-Host "Solution created" -ForegroundColor Green
+}
+
+# Route every subsequent EntityDefinitions/Attributes call into this solution
+$headers["MSCRM-SolutionUniqueName"] = $solutionUniqueName
+
+Write-Host "`n=== Step 4: Create the IT Service Desk Request table ===" -ForegroundColor Cyan
+
+# Build the table definition JSON. Dataverse requires the primary name
+# attribute to be defined inline on entity creation - without it the API
+# rejects the whole request with "Required field 'PrimaryAttribute' is
+# missing for RequestName='CreateEntity'".
+$tableJson = @'
+{
+  "SchemaName": "rnc_ITServiceDeskRequest",
+  "DisplayName": {
+    "@odata.type": "Microsoft.Dynamics.CRM.Label",
+    "LocalizedLabels": [{ "@odata.type": "Microsoft.Dynamics.CRM.LocalizedLabel", "Label": "IT Service Desk Request", "LanguageCode": 1033 }]
+  },
+  "DisplayCollectionName": {
+    "@odata.type": "Microsoft.Dynamics.CRM.Label",
+    "LocalizedLabels": [{ "@odata.type": "Microsoft.Dynamics.CRM.LocalizedLabel", "Label": "IT Service Desk Requests", "LanguageCode": 1033 }]
+  },
+  "Description": {
+    "@odata.type": "Microsoft.Dynamics.CRM.Label",
+    "LocalizedLabels": [{ "@odata.type": "Microsoft.Dynamics.CRM.LocalizedLabel", "Label": "Tracks IT service desk / helpdesk support requests", "LanguageCode": 1033 }]
+  },
+  "OwnershipType": "UserOwned",
+  "TableType": "Standard",
+  "IsAuditEnabled": { "Value": true },
+  "HasActivities": false,
+  "HasNotes": true,
+  "PrimaryNameAttribute": "rnc_name",
+  "Attributes": [
+    {
+      "@odata.type": "Microsoft.Dynamics.CRM.StringAttributeMetadata",
+      "SchemaName": "rnc_name",
+      "DisplayName": {
+        "@odata.type": "Microsoft.Dynamics.CRM.Label",
+        "LocalizedLabels": [{ "@odata.type": "Microsoft.Dynamics.CRM.LocalizedLabel", "Label": "Ticket Reference", "LanguageCode": 1033 }]
+      },
+      "RequiredLevel": { "Value": "ApplicationRequired" },
+      "MaxLength": 100,
+      "IsPrimaryName": true
+    }
+  ]
+}
+'@
 
 Write-Host "Creating table..." -ForegroundColor Yellow
 try {
