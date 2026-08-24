@@ -120,9 +120,10 @@ Copilot Studio doesn't have a built-in "Intune" connector. Rather than
 building the two Graph operations by hand, import the ready-made
 definition: **[`intune-device-health-connector.json`](intune-device-health-connector.json)**.
 
-1. Download/open `intune-device-health-connector.json` from this repo and
-   replace `REPLACE_WITH_TENANT_ID` (in `securityDefinitions.graph_oauth.tokenUrl`)
-   with your actual Directory (tenant) ID from step 2 above.
+1. `intune-device-health-connector.json` already has the tenant ID baked in
+   (`7a5dc099-b7ee-46b9-989b-c7ec53d9953b`, the `rnobleconsultancydefault`
+   tenant) in `securityDefinitions.graph_oauth.tokenUrl` — no edit needed
+   unless you're pointing this at a different tenant.
 2. **make.powerapps.com** (same environment) → **Custom connectors** →
    **New custom connector** → **Import an OpenAPI file** → select the edited
    JSON file.

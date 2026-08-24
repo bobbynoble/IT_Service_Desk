@@ -111,7 +111,7 @@
     "graph_oauth": {
       "type": "oauth2",
       "flow": "application",
-      "tokenUrl": "https://login.microsoftonline.com/REPLACE_WITH_TENANT_ID/oauth2/v2.0/token",
+      "tokenUrl": "https://login.microsoftonline.com/7a5dc099-b7ee-46b9-989b-c7ec53d9953b/oauth2/v2.0/token",
       "scopes": {
         "https://graph.microsoft.com/.default": "Access Microsoft Graph with this app's granted application permissions"
       }
