@@ -6,6 +6,32 @@ compliance in Microsoft Intune via Microsoft Graph. It doesn't touch
 Dataverse or tickets — it only answers "what's the state of this device?"
 when the parent agent calls it.
 
+## Prerequisite: Intune must actually be licensed on this tenant
+
+Everything below (Entra app, HTTP With Microsoft Entra ID connection, the
+flow) can be fully wired up correctly and still fail every call with
+`403 Forbidden` from `proxy.*.manage.microsoft.com` — that's not a config
+bug, it means Intune itself isn't licensed/provisioned on the tenant.
+Confirmed on `rnobleconsultancydefault`: Global Admin role, correct
+`DeviceManagementManagedDevices.Read.All` delegated scope granted
+tenant-wide, and a freshly re-authenticated connection all still hit the
+same Forbidden error.
+
+Check/fix before debugging anything else:
+1. **admin.microsoft.com** → **Billing** → **Your products** — look for
+   **Microsoft Intune Plan 1**, **Enterprise Mobility + Security E3/E5**,
+   or **Microsoft 365 Business Premium/E3/E5**. If none of these are
+   present, Intune isn't provisioned.
+2. If missing, start a trial: **Billing** → **Purchase services** → search
+   **Intune**.
+3. Assign the license to your own account: **Users** → **Active users** →
+   your account → **Licenses and Apps**.
+4. Recheck **intune.microsoft.com** loads a normal dashboard (not a
+   licensing/trial prompt) before re-testing the flow below.
+5. Even once licensed, the device list is empty until at least one device
+   is actually MDM-enrolled — enroll one (Windows: Settings → Accounts →
+   Access work or school → Connect) for a meaningful end-to-end test.
+
 ---
 
 ## 1. Fields to paste into Copilot Studio
