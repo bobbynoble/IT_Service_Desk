@@ -1,0 +1,121 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "Intune Device Health",
+    "description": "Wraps the Microsoft Graph device management endpoints used by the Device Health Check Agent to look up Intune-managed device compliance and health.",
+    "version": "1.0.0"
+  },
+  "host": "graph.microsoft.com",
+  "basePath": "/v1.0",
+  "schemes": ["https"],
+  "consumes": [],
+  "produces": ["application/json"],
+  "paths": {
+    "/deviceManagement/managedDevices": {
+      "get": {
+        "summary": "Find Intune devices by name, serial number, or owner",
+        "description": "Lists managed devices, optionally filtered by device name, serial number, or owning user. Use $filter to match a specific device, e.g. contains(deviceName,'FINANCE-12') or userPrincipalName eq 'jane.doe@rnconsultancy.co.uk'.",
+        "operationId": "ListManagedDevices",
+        "parameters": [
+          {
+            "name": "$filter",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "description": "OData filter, e.g. contains(deviceName,'FINANCE-12') or userPrincipalName eq 'jane.doe@rnconsultancy.co.uk' or contains(serialNumber,'ABC123')"
+          },
+          {
+            "name": "$top",
+            "in": "query",
+            "required": false,
+            "type": "integer",
+            "default": 10,
+            "description": "Maximum number of devices to return"
+          },
+          {
+            "name": "$select",
+            "in": "query",
+            "required": false,
+            "type": "string",
+            "default": "id,deviceName,serialNumber,userPrincipalName,complianceState,lastSyncDateTime,operatingSystem,osVersion,isEncrypted,managementState",
+            "description": "Comma-separated fields to return"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Matching devices",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "value": {
+                  "type": "array",
+                  "items": { "$ref": "#/definitions/ManagedDevice" }
+                }
+              }
+            }
+          },
+          "401": { "description": "Missing or invalid access token" },
+          "403": { "description": "App registration is missing DeviceManagementManagedDevices.Read.All or admin consent" }
+        }
+      }
+    },
+    "/deviceManagement/managedDevices/{managedDeviceId}": {
+      "get": {
+        "summary": "Get full details for one Intune device by its ID",
+        "description": "Returns full detail for a single managed device, including compliance and encryption state.",
+        "operationId": "GetManagedDevice",
+        "parameters": [
+          {
+            "name": "managedDeviceId",
+            "in": "path",
+            "required": true,
+            "type": "string",
+            "description": "The device's Intune managedDeviceId (the 'id' field returned by ListManagedDevices)"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Device details",
+            "schema": { "$ref": "#/definitions/ManagedDevice" }
+          },
+          "404": { "description": "No device found with that ID" }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "ManagedDevice": {
+      "type": "object",
+      "properties": {
+        "id": { "type": "string" },
+        "deviceName": { "type": "string" },
+        "serialNumber": { "type": "string" },
+        "userPrincipalName": { "type": "string" },
+        "userDisplayName": { "type": "string" },
+        "complianceState": {
+          "type": "string",
+          "description": "compliant, noncompliant, inGracePeriod, configManager, etc."
+        },
+        "lastSyncDateTime": { "type": "string", "format": "date-time" },
+        "operatingSystem": { "type": "string" },
+        "osVersion": { "type": "string" },
+        "isEncrypted": { "type": "boolean" },
+        "managementState": { "type": "string" },
+        "enrolledDateTime": { "type": "string", "format": "date-time" },
+        "model": { "type": "string" },
+        "manufacturer": { "type": "string" }
+      }
+    }
+  },
+  "securityDefinitions": {
+    "graph_oauth": {
+      "type": "oauth2",
+      "flow": "application",
+      "tokenUrl": "https://login.microsoftonline.com/REPLACE_WITH_TENANT_ID/oauth2/v2.0/token",
+      "scopes": {
+        "https://graph.microsoft.com/.default": "Access Microsoft Graph with this app's granted application permissions"
+      }
+    }
+  },
+  "security": [{ "graph_oauth": [] }]
+}

@@ -114,43 +114,43 @@ connector's connection (step 3 below) or a key vault, never committed here.
 
 ---
 
-## 3. Create a custom connector for the Graph calls
+## 3. Create the custom connector for the Graph calls
 
-Copilot Studio doesn't have a built-in "Intune" connector, so this wraps
-the two Graph endpoints the agent needs as a custom connector in the same
-environment.
+Copilot Studio doesn't have a built-in "Intune" connector. Rather than
+building the two Graph operations by hand, import the ready-made
+definition: **[`intune-device-health-connector.json`](intune-device-health-connector.json)**.
 
-1. **make.powerapps.com** (same environment) → **Custom connectors** →
-   **New custom connector** → **Create from blank**.
-   - Name: `Intune Device Health`
-   - Host: `graph.microsoft.com`
-   - Base URL: `/v1.0`
-2. **Security** tab → **OAuth 2.0**:
-   - Identity provider: **Azure Active Directory**
-   - Client ID / Client secret: from step 2 above
-   - Authorization URL: `https://login.microsoftonline.com/<tenant-id>/oauth2/v2.0/authorize`
-   - Token URL: `https://login.microsoftonline.com/<tenant-id>/oauth2/v2.0/token`
-   - Refresh URL: same as Token URL
-   - Scope: `https://graph.microsoft.com/.default`
-   - Grant type: **Client Credentials** (app-only, not "Authorization Code" —
-     this is what lets it look up any device, not just the signed-in user's)
-3. **Definition** tab → add two actions:
+1. Download/open `intune-device-health-connector.json` from this repo and
+   replace `REPLACE_WITH_TENANT_ID` (in `securityDefinitions.graph_oauth.tokenUrl`)
+   with your actual Directory (tenant) ID from step 2 above.
+2. **make.powerapps.com** (same environment) → **Custom connectors** →
+   **New custom connector** → **Import an OpenAPI file** → select the edited
+   JSON file.
+3. On the **General** step, host/base URL are already set from the file
+   (`graph.microsoft.com` / `/v1.0`) — just confirm the connector icon/name
+   if you want to change them.
+4. On the **Security** step, it should show **OAuth 2.0** already selected
+   with the token URL from the file. Fill in:
+   - Client ID: the Application (client) ID from step 2 above
+   - Client secret: the client secret value from step 2 above
+   - Grant type: confirm it shows **Client Credentials** — this is what
+     lets it look up any device, not just the signed-in user's
+5. On the **Definition** step, you should see both operations already
+   defined (`ListManagedDevices`, `GetManagedDevice`) with their
+   parameters — no manual entry needed.
+6. **Create connector**.
+7. **Test** tab → **New connection** (this runs the client-credentials
+   flow against your app registration) → run `ListManagedDevices` with no
+   `$filter` to confirm it returns devices from your tenant.
 
-   | Action | Method | Path |
-   |---|---|---|
-   | `ListManagedDevices` | GET | `/deviceManagement/managedDevices` (expose `$filter` and `$search` as query parameters) |
-   | `GetManagedDevice` | GET | `/deviceManagement/managedDevices/{managedDeviceId}` |
-
-   For `ListManagedDevices`, add a query parameter `$filter` (string) so
-   the agent can search by `deviceName`, `serialNumber`, or
-   `userPrincipalName` (e.g.
-   `contains(deviceName,'FINANCE-12')` or
-   `userPrincipalName eq 'jane.doe@rnconsultancy.co.uk'`).
-
-4. **Test** tab → create a connection (it'll run the client-credentials
-   flow using the app registration) → run `ListManagedDevices` with no
-   filter to confirm it returns devices.
-5. **Create connector**.
+If you'd rather build it by hand instead of importing, the equivalent
+manual steps are: Custom connectors → New → Create from blank → Host
+`graph.microsoft.com`, Base URL `/v1.0` → Security: OAuth 2.0, Azure Active
+Directory, Client Credentials grant, Token URL
+`https://login.microsoftonline.com/<tenant-id>/oauth2/v2.0/token`, Scope
+`https://graph.microsoft.com/.default` → Definition: add `GET
+/deviceManagement/managedDevices` (with `$filter`, `$top`, `$select` query
+params) and `GET /deviceManagement/managedDevices/{managedDeviceId}`.
 
 ---
 
