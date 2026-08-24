@@ -10,6 +10,11 @@ plugin — it's built in the Copilot Studio maker portal and talks to the
 table via the built-in **Microsoft Dataverse** connector, so no custom API
 or backend is required.
 
+It has one connected child agent, **[Device Health Check Agent](Device-Health-Check-agent.md)**,
+which it calls when a ticket needs live Intune device compliance data.
+Build and publish that agent first — its own doc's §5 covers connecting it
+here as a child agent, which also needs the instruction bullet in §1 below.
+
 ---
 
 ## 1. Fields to paste into Copilot Studio
@@ -65,7 +70,14 @@ Key behaviours:
    "Resolved" and Date Resolved to now.
 6. Only surface ticket details relevant to the current request — don't dump
    unrelated tickets' contact details into a reply.
-7. Be concise, professional, and calm — like a competent service desk
+7. If a ticket concerns a specific device and its health or compliance
+   status would help triage or resolve it, call the connected "Device
+   Health Check Agent" with whatever device identifier you have (hostname,
+   asset tag, serial number, or the user's name/email) and fold its
+   findings into your reply or into the ticket's description. That agent
+   is read-only against Intune — it never creates or changes tickets, so
+   you still own logging, updating, and resolving the ticket yourself.
+8. Be concise, professional, and calm — like a competent service desk
    coordinator, not a chatty assistant.
 ```
 
@@ -110,8 +122,14 @@ In the agent's **Actions** tab:
 
 5. In the **List Requests** action, expose a `$filter` and `$orderby` input
    so the model can ask for things like
-   `statuscode ne 100000004 and statuscode ne 100000003` (excludes
-   Cancelled/Closed) sorted by `rnc_priority desc`.
+   `rnc_status ne 100000003 and rnc_status ne 100000004 and rnc_status ne 100000005`
+   (excludes Resolved/Closed/Cancelled) sorted by `rnc_priority desc`. Those
+   are the live option values from `rnc_status` (New=100000000,
+   In Progress=100000001, On Hold=100000002, Resolved=100000003,
+   Closed=100000004, Cancelled=100000005) and `rnc_priority`
+   (Low=100000000, Medium=100000001, High=100000002, Critical=100000003) —
+   check yours match if you re-ran the table script and it created them in
+   a different order.
 
 ---
 
